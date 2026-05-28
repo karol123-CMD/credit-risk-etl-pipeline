@@ -1,0 +1,14 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Excel temporary files
+~$*
+
+# Local scratch files
+*.tmp
+*.bak
+
+# Python/cache artifacts, if created locally
+__pycache__/
+.ipynb_checkpoints/
