@@ -2,7 +2,7 @@
 
 Projeto de ETL e análise exploratória do dataset **Give Me Some Credit**, desenvolvido principalmente com Excel e Power Query. O trabalho documenta a preparação de dados, a criação de grupos descritivos e a comparação de taxas observadas — não é um modelo preditivo nem uma ferramenta de decisão de crédito.
 
-![Dashboard de análise de risco de crédito](04_visuals/charts/Dashboard.png)
+> **Situação do material visual:** não exibo a imagem do dashboard nesta página porque o arquivo disponível contém filtros ativos e recomendações direcionais por idade/renda, além de indicadores ainda não reconciliados. A imagem foi mantida sem alteração; consulte-a somente como material de trabalho até revisão no Excel.
 
 ## Em 30 segundos
 
@@ -55,7 +55,7 @@ Abra [`credit_risk_analysis.xlsx`](02_analysis/credit_risk_analysis.xlsx) em uma
 - [Insights e números de referência](03_docs/insights.md)
 - [Guia para entrevista](03_docs/interview-guide.md)
 - [Apresentação em PDF](04_visuals/deck/Credit-Risk-Analytics.pdf)
-- [Imagem do dashboard](04_visuals/charts/Dashboard.png)
+- [Imagem atual do dashboard — não reconciliada](04_visuals/charts/Dashboard.png)
 
 O PDF e a imagem são mantidos como materiais existentes; não foram regenerados nesta revisão, pois não havia uma fonte editável disponível para assegurar atualização fiel aos números reconciliados.
 
