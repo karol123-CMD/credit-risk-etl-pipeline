@@ -4,7 +4,7 @@ Use este material como apoio para explicar decisões reais do projeto, adaptando
 
 ## Apresentação em 60–90 segundos
 
-“Este projeto é uma análise exploratória de risco de crédito feita principalmente no Excel, com Power Query para preparar os dados. Usei o conjunto Give Me Some Credit e organizei o fluxo desde o CSV, passando pelas consultas RAW e CLEAN, até as tabelas dinâmicas e o dashboard. No tratamento, por exemplo, preservei os campos originais, tratei os códigos 96 e 98 das variáveis de atraso como ausentes e marquei a renda imputada pela mediana para manter rastreabilidade. A tabela final tem 149.999 registros. Uma segmentação simples por regras mostrou taxas observadas diferentes entre grupos, mas não é um modelo preditivo e não serve para decidir crédito. Também estou deixando explícitas limitações do arquivo: a atualização ainda usa caminho local e os pivôs e visuais precisam de reconciliação no Excel antes de serem apresentados como atualizados.”
+“Este projeto é uma análise exploratória de risco de crédito feita principalmente no Excel, com Power Query para preparar os dados. Usei o conjunto Give Me Some Credit e organizei o fluxo desde o CSV, passando pelas consultas RAW e CLEAN, até as tabelas dinâmicas e o dashboard. No tratamento, por exemplo, preservei os campos originais, tratei os códigos 96 e 98 das variáveis de atraso como ausentes e marquei a renda imputada pela mediana para manter rastreabilidade. A tabela final tem 149.999 registros. Uma segmentação simples por regras mostrou taxas observadas diferentes entre grupos, mas não é um modelo preditivo e não serve para decidir crédito. Também estou sendo transparente sobre o que ainda falta: a planilha foi atualizada, mas o refresh do Power Query em outro caminho e a reconciliação dos pivôs e visuais ainda precisam ser demonstrados no Excel.”
 
 ## Cinco decisões técnicas para saber explicar
 
@@ -26,13 +26,13 @@ Porque é uma regra criada com limiares e categorias do próprio projeto. Não e
 Comparei totais de origem e saída, identifiquei a linha com idade zero, contei valores ausentes, documentei a flag de imputação e os 371 valores de utilização acima do limite analítico. A validação dos pivôs e gráficos do workbook ainda precisa ser concluída no Excel.
 
 **Como outra pessoa atualiza a análise?**  
-Ainda há uma limitação de portabilidade: `CaminhoArquivo` usa um caminho absoluto local, e a consulta `ETL_LOG_Projeto01` referencia um arquivo que não está no repositório. A configuração precisa ser ajustada no Editor do Power Query antes de prometer reprodução integral.
+A autora ajustou o caminho na versão atualizada, mas eu ainda não confirmei a configuração nem testei o refresh em outro computador. Também preciso verificar se `ETL_LOG_Projeto01` continua dependente de um arquivo externo antes de afirmar que a reprodução está completa.
 
 **Que conclusão é possível tirar sobre renda ou idade?**  
 Somente diferenças descritivas observadas nos grupos desta base. Elas não demonstram causalidade nem justificam tratar pessoas de forma diferente; renda e idade podem exigir avaliação de viés e conformidade.
 
 **O que você faria como próximo passo?**  
-Corrigiria e validaria o workbook no Excel: resolver a fórmula com divisão por zero e as categorias com pontuação diferente, configurar uma origem portátil, verificar a consulta de log, limpar filtros, atualizar pivôs e reconciliar os visuais com `CLEAN_pipeline`. Depois regeneraria a imagem e o PDF a partir de fontes editáveis e faria a conferência visual.
+Eu abriria a versão atualizada no Excel para confirmar a fórmula de divisão por zero, a consistência das categorias, a origem do Power Query e o status do log. Depois limparia filtros residuais, atualizaria os pivôs e reconciliaria os visuais com `CLEAN_pipeline`. Só então regeneraria imagens e PDF a partir de fontes editáveis e faria a conferência visual.
 
 ## Limitações que devem ser apresentadas com clareza
 
@@ -40,6 +40,6 @@ Corrigiria e validaria o workbook no Excel: resolver a fórmula com divisão por
 - regra `Nivel_Risco` descritiva, não modelo de concessão;
 - 19,82% das rendas foram imputadas pela mediana global;
 - ausência de teste de atualização do Power Query em outro computador;
-- workbook não foi alterado nesta revisão; fórmula `EDA!N39`, faixas de renda, alguns caches de pivô e visuais ainda precisam de validação interativa;
+- a versão corrigida pela autora já foi incorporada, mas não foi validada interativamente; a fórmula `EDA!N39`, as faixas de renda, caches de pivô, filtros e visuais ainda precisam de conferência;
 - a licença/termos de redistribuição do conjunto não foram confirmados.
 

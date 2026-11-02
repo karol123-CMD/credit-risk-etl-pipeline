@@ -2,7 +2,7 @@
 
 Projeto de ETL e análise exploratória do dataset **Give Me Some Credit**, desenvolvido principalmente com Excel e Power Query. O trabalho documenta a preparação de dados, a criação de grupos descritivos e a comparação de taxas observadas — não é um modelo preditivo nem uma ferramenta de decisão de crédito.
 
-> **Situação do material visual:** não exibo a imagem do dashboard nesta página porque o arquivo disponível contém filtros ativos e recomendações direcionais por idade/renda, além de indicadores ainda não reconciliados. A imagem foi mantida sem alteração; consulte-a somente como material de trabalho até revisão no Excel.
+> **Materiais visuais:** não incluí uma captura no topo. Os prints recebidos ainda mostram filtros ativos e conteúdo que não foi reconciliado com a versão atual da planilha; por isso, não são apresentados como retrato validado do projeto.
 
 ## Em 30 segundos
 
@@ -27,7 +27,7 @@ O tratamento documentado inclui remover o único registro com `age = 0`, tratar 
 
 ## Resultados de referência
 
-Os números abaixo foram calculados a partir da tabela armazenada `CLEAN_pipeline` e conferidos com o CSV do desafio nesta revisão. A apresentação atual do workbook não pôde ser atualizada ou validada no Excel; por isso, estes números não devem ser confundidos com uma reconciliação dos pivôs e visuais atualmente salvos.
+Os números abaixo foram calculados a partir da tabela armazenada `CLEAN_pipeline` e conferidos com o CSV do desafio nesta revisão. A autora forneceu uma versão corrigida do workbook, incorporada a esta branch. Nesta revisão, não fiz atualização nem validação interativa no Excel; assim, os números abaixo continuam sendo a referência anteriormente conferida da tabela armazenada e não certificam a reconciliação dos pivôs e visuais da versão mais recente.
 
 - 150.000 linhas na origem e 149.999 após o filtro de idade inválida;
 - 10.026 registros positivos em `Inadimplente` (6,684% da base final);
@@ -45,7 +45,7 @@ Este é um estudo exploratório. `Nivel_Risco` é uma segmentação descritiva b
 
 Abra [`credit_risk_analysis.xlsx`](02_analysis/credit_risk_analysis.xlsx) em uma versão desktop recente do Microsoft Excel para Windows com Power Query. Para atualizar, configure a consulta de origem para apontar ao `cs-training.csv` obtido na fonte, atualize as consultas auxiliares e depois `CLEAN_pipeline`; ao final, atualize as tabelas dinâmicas e confira os totais com a metodologia.
 
-**Reprodutibilidade ainda pendente:** a configuração atual contém caminho local para o CSV e uma consulta de log que depende de um arquivo externo não versionado. As consultas não foram atualizadas nesta revisão. As etapas para corrigir e testar isso estão descritas em [`methodology.md`](03_docs/methodology.md); portanto, não afirmo que a atualização seja portátil neste momento.
+**Reprodutibilidade ainda pendente:** na versão anteriormente inspecionada, a origem usava um caminho local para o CSV e a consulta de log dependia de um arquivo externo não versionado. A versão revisada enviada pela autora foi incorporada à branch, mas sua configuração e o refresh completo não foram verificados interativamente. A portabilidade ainda não está comprovada; veja as limitações e os passos de conferência em [`methodology.md`](03_docs/methodology.md).
 
 ## Materiais do projeto
 
@@ -55,7 +55,7 @@ Abra [`credit_risk_analysis.xlsx`](02_analysis/credit_risk_analysis.xlsx) em uma
 - [Insights e números de referência](03_docs/insights.md)
 - [Guia para entrevista](03_docs/interview-guide.md)
 - [Apresentação em PDF](04_visuals/deck/Credit-Risk-Analytics.pdf)
-- [Imagem atual do dashboard — não reconciliada](04_visuals/charts/Dashboard.png)
+- [Captura existente do dashboard — não validada](04_visuals/charts/Dashboard.png)
 
 O PDF e a imagem são mantidos como materiais existentes; não foram regenerados nesta revisão, pois não havia uma fonte editável disponível para assegurar atualização fiel aos números reconciliados.
 

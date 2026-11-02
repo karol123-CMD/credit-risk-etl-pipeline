@@ -14,15 +14,15 @@ O workbook contém estas cinco consultas:
 
 | Consulta | Papel observado | Situação de atualização |
 |---|---|---|
-| `CaminhoArquivo` | Consulta auxiliar que fornece o caminho do CSV à importação. | Contém caminho local absoluto; precisa ser configurada em outro computador. |
+| `CaminhoArquivo` | Consulta auxiliar que fornece o caminho do CSV à importação. | Na versão anteriormente analisada, continha caminho local; a configuração da versão corrigida enviada pela autora não foi verificada. |
 | `RAW_CreditData` | Importa o CSV de treinamento e aplica a leitura/tipagem inicial. | Depende de `CaminhoArquivo`. |
 | `MedianaRenda` | Calcula a mediana global de `MonthlyIncome` para imputação. | Consulta auxiliar usada por `CLEAN_pipeline`. |
 | `CLEAN_pipeline` | Trata dados, cria colunas derivadas e organiza a tabela final. | Base das análises e da tabela `CLEAN_pipeline`. |
-| `ETL_LOG_Projeto01` | Importa um log de etapas a partir de outro arquivo CSV. | O arquivo externo não está no repositório; dependência pode impedir uma atualização completa. A folha de qualidade preserva o registro legível das etapas. |
+| `ETL_LOG_Projeto01` | Importava um log de etapas a partir de outro arquivo CSV. | Na versão anteriormente analisada, o arquivo externo não estava no repositório. Não confirmei se a consulta continua ativa na versão atual; a folha de qualidade preserva o registro legível das etapas. |
 
-A atualização não foi executada nesta revisão. Para reproduzir em outro computador, obtenha os arquivos na fonte original, abra o Editor do Power Query e edite `CaminhoArquivo` para selecionar o `cs-training.csv` local. Atualize primeiro as consultas auxiliares `CaminhoArquivo` e `MedianaRenda`, depois `RAW_CreditData` e `CLEAN_pipeline`; se a consulta `ETL_LOG_Projeto01` continuar ativa, será necessário localizar o CSV de log original ou desabilitar/remover essa dependência no Excel. Por fim, atualize tabelas dinâmicas e confira os totais abaixo. Recomenda-se Excel desktop recente para Windows com Power Query; versão exata e compatibilidade não foram testadas em outro computador.
+A autora informou ter ajustado o caminho de origem e enviou a planilha atualizada, agora incorporada à branch. Não executei o refresh nem confirmei no Excel se o log externo foi removido/desabilitado ou se a nova origem funciona em outra pasta. Para reproduzir, abra o Editor do Power Query, confirme a origem em `CaminhoArquivo` e a disponibilidade do CSV; atualize as consultas auxiliares `CaminhoArquivo` e `MedianaRenda`, depois `RAW_CreditData` e `CLEAN_pipeline`. Confirme também se `ETL_LOG_Projeto01` continua ativa e exige arquivo externo. Por fim, atualize as tabelas dinâmicas e compare os totais com os números de referência. Recomenda-se Excel desktop recente para Windows com Power Query; versão exata, configuração atual e compatibilidade em outro computador não foram testadas.
 
-**Limitação conhecida:** a origem é atualmente um caminho absoluto de máquina local. A sugestão para próxima revisão é substituir por uma seleção/parâmetro de caminho documentado e verificar se o log pode ser preservado como registro estático sem continuar como dependência da atualização. Isso requer edição e validação interativa no Excel.
+**Limitação conhecida:** o caminho foi ajustado pela autora na versão enviada, mas não foi inspecionado nem testado por mim. A portabilidade só poderá ser afirmada depois de confirmar a consulta no Excel e executar uma atualização em outra pasta ou computador. Também falta confirmar se o log é uma dependência ativa e se pode permanecer apenas como registro estático.
 
 ## Etapas de tratamento documentadas
 
@@ -45,9 +45,9 @@ As regras acima descrevem a implementação documentada. Como o refresh não foi
 
 ## Referência numérica e limitações de reconciliação
 
-A tabela armazenada `CLEAN_pipeline` foi lida sem alterar o workbook e comparada ao CSV: 149.999 registros, 10.026 positivos, taxa global de 6,684%, 29.731 rendas imputadas, 3.924 dependentes ausentes na coluna original e 371 valores de utilização acima de 2. Esses totais de referência não equivalem à validação dos pivôs, gráficos ou segmentações salvos.
+Na versão de referência anteriormente inspecionada, a tabela armazenada `CLEAN_pipeline` foi lida sem alterar o workbook e comparada ao CSV: 149.999 registros, 10.026 positivos, taxa global de 6,684%, 29.731 rendas imputadas, 3.924 dependentes ausentes na coluna original e 371 valores de utilização acima de 2. Esses totais pertencem à versão observada naquela revisão; não foram recalculados com o workbook corrigido pela autora e não equivalem à validação dos pivôs, gráficos ou segmentações atuais.
 
-Não foi possível concluir a edição do workbook nesta execução. Permanecem por corrigir/verificar: `EDA!N39` com `#DIV/0!`; grafias divergentes de faixas de renda entre células; cache de três pivôs da folha de renda com intervalo aparentemente inadequado/desatualizado; filtros/segmentações e números visuais que precisam de atualização e reconciliação; caminho local e dependência do log externo; nome definido `CLEAN_pipiline`; conexão duplicada de `MedianaRenda`; metadados locais. O binário permanece inalterado. Até validação interativa no Excel, use os números da tabela de referência com essa ressalva e não apresente o dashboard/PDF como reconciliado.
+A versão corrigida enviada pela autora foi incorporada a esta branch. A autora informou ter corrigido `EDA!N39` e ajustado o caminho de origem; não abri essa versão no Excel nem executei recálculo ou refresh. Portanto, não trato como comprovadas a correção da fórmula, a padronização das faixas de renda, a reconciliação dos caches de pivôs, a limpeza de filtros/segmentações, a revisão do nome definido e da conexão duplicada, ou a remoção de metadados locais. Os números desta página são referência da versão anteriormente conferida, não uma reconciliação do dashboard ou do PDF atuais.
 
 ## Uso responsável
 

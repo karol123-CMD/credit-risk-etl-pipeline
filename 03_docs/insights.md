@@ -2,7 +2,7 @@
 
 ## Base de referência
 
-Os totais abaixo foram conferidos na tabela armazenada `CLEAN_pipeline` e comparados com o CSV de treinamento. O workbook não foi atualizado durante esta revisão, por isso os números são referência da tabela final armazenada — não uma reconciliação dos pivôs, gráficos, imagem ou PDF publicados.
+Os totais abaixo foram conferidos na tabela armazenada `CLEAN_pipeline` da versão de referência anteriormente inspecionada e comparados com o CSV de treinamento. A autora enviou uma versão corrigida do workbook, incorporada à branch, mas os números não foram recalculados nessa versão; portanto, continuam sendo uma referência histórica, não uma reconciliação dos pivôs, gráficos, imagem ou PDF atuais.
 
 | Indicador | Valor de referência |
 |---|---:|
@@ -69,8 +69,8 @@ A associação entre faixas e taxa deve ser lida com cautela: 29.731 rendas (19,
 - A análise é descritiva; não há inferência causal, treinamento nem validação fora da amostra.
 - `Nivel_Risco` é regra exploratória e não score calibrado.
 - O conjunto de dados representa um contexto e uma população específicos; não se presume representatividade de outras carteiras.
-- Não foi possível atualizar e reconciliar os pivôs e gráficos do workbook nesta revisão. Em particular, os caches de três pivôs de renda precisam ser corrigidos/atualizados no Excel. A imagem `Dashboard.png` e o PDF são mantidos sem alteração e não são apresentados aqui como versões reconciliadas.
-- A atualização do Power Query ainda depende de um caminho local e de um arquivo externo de log ausente do repositório.
+- A autora atualizou o workbook, mas não foi feita validação interativa nem reconciliação dos pivôs e gráficos desta versão. Os prints recebidos exibem filtros ativos e conteúdo não reconciliado; não foram adicionados ao repositório. A imagem `Dashboard.png` e o PDF permanecem sem alteração e não são apresentados como versões validadas.
+- Na versão anteriormente inspecionada, o Power Query dependia de caminho local e de arquivo externo de log. A nova configuração e a necessidade do log não foram verificadas; não afirmo que a atualização seja portátil.
 
 Para a metodologia, as regras de transformação e o estado de reprodutibilidade, consulte [`methodology.md`](methodology.md). Os números desta página não devem ser usados fora do contexto exploratório descrito.
 

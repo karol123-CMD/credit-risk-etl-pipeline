@@ -1,6 +1,6 @@
 # Dicionário de dados
 
-Este dicionário descreve as colunas armazenadas na tabela `CLEAN_pipeline` do workbook. A tabela tem 24 colunas e 149.999 linhas; a origem tem 150.000 registros. Os nomes foram traduzidos ou derivados no Power Query. As regras são exploratórias e não constituem uma política de crédito.
+Este dicionário descreve as colunas da tabela `CLEAN_pipeline` na versão de referência anteriormente inspecionada do workbook. Essa tabela tinha 24 colunas e 149.999 linhas, para 150.000 registros na origem. A autora enviou uma planilha corrigida, agora incorporada à branch, mas a estrutura e os valores não foram conferidos novamente no Excel. As regras são exploratórias e não constituem uma política de crédito.
 
 **Fonte declarada:** [Give Me Some Credit — Kaggle](https://www.kaggle.com/c/GiveMeSomeCredit). `Data Dictionary.xls` é o dicionário incluído no pacote do desafio; este Markdown descreve as variáveis finais utilizadas no projeto. Os termos de redistribuição dos dados não foram confirmados nesta revisão.
 
@@ -40,9 +40,9 @@ Este dicionário descreve as colunas armazenadas na tabela `CLEAN_pipeline` do w
 - **Atrasos:** 96 e 98 são tratados como códigos sentinela e substituídos por nulo nos três campos. Zero é preservado. Quando os três campos ficam nulos, o grupo é `Sem Informacao`.
 - **Utilização rotativa:** valores acima de 2 na coluna original são nulos na coluna limpa para a análise por faixas. Foram identificados 371 casos; não foram removidos registros por essa condição.
 - **Faixa etária:** `<30`, `30–<50`, `50–<65`, `>=65`, respectivamente `Jovem`, `Adulto`, `Maduro`, `Senior`.
-- **Faixa de renda:** renda ausente ou não positiva = `Nao Informada`; `<2.000` = `<2K`; `2.000–<5.000` = `2K-5K`; `5.000–<10.000` = `5K-10K`; `>=10.000` = `10K+`. As grafias de faixa no workbook precisam ser padronizadas antes de validar pivôs.
+- **Faixa de renda:** renda ausente ou não positiva = `Nao Informada`; `<2.000` = `<2K`; `2.000–<5.000` = `2K-5K`; `5.000–<10.000` = `5K-10K`; `>=10.000` = `10K+`. A grafia das faixas e suas contagens nos pivôs da versão corrigida ainda precisam ser conferidas no Excel.
 - **Faixas de utilização:** nulo = `Nao Informado`; `<0` = `Valor Invalido`; até 0,30 = `Baixa`; até 0,60 = `Moderada`; até 0,90 = `Alta`; acima de 0,90 = `Critica`.
 - **Segmentação `Nivel_Risco`:** `Alto` se total de atrasos `>=3` ou utilização `Critica`; `Medio` se total de atrasos `>=1` ou utilização `Alta`; caso contrário `Baixo`.
 
-As descrições documentam a lógica observada no projeto, mas o workbook não foi atualizado nesta revisão. Veja as limitações de atualização e reconciliação em [`methodology.md`](methodology.md).
+As descrições e números de referência documentam a versão observada anteriormente; o workbook atualizado pela autora ainda não foi recalculado ou validado por esta revisão. Veja as limitações de atualização e reconciliação em [`methodology.md`](methodology.md).
 
