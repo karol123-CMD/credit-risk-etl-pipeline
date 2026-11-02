@@ -1,241 +1,55 @@
 # Metodologia
 
-## Analise de Risco de Credito - Give Me Some Credit
+## Escopo
 
-> **Dataset:** Give Me Some Credit - Kaggle  
-> **Arquivo principal:** `02_analysis/credit_risk_analysis.xlsx`  
-> **Ferramentas:** Excel, Power Query, Tabelas Dinamicas e Markdown  
-> **Escopo:** ETL, analise exploratoria, segmentacoes e KPIs descritivos
+Análise exploratória da base **Give Me Some Credit** no Excel, com Power Query para ETL e tabelas dinâmicas, fórmulas e gráficos para análise descritiva. Não há treinamento ou validação de modelo preditivo, inferência causal, nem avaliação para uso em concessão de crédito.
 
-Este documento descreve a metodologia aplicada no projeto. O objetivo foi construir uma analise exploratoria de risco de credito com boa rastreabilidade, sem criar modelo preditivo nem inferencias causais.
+## Origem e arquivos
 
-## Estrutura do Projeto
+A fonte declarada no projeto é a competição [Give Me Some Credit no Kaggle](https://www.kaggle.com/c/GiveMeSomeCredit), de 2011. A página identifica a competição e seu objetivo original de previsão, mas os termos específicos aplicáveis à redistribuição dos dados não foram confirmados. Não se presume permissão de redistribuição. O pacote inclui `cs-training.csv` (usado), `cs-test.csv` e `sampleEntry.csv` (não usados nesta análise), além de `Data Dictionary.xls` (dicionário original). O dicionário em Markdown neste repositório facilita a leitura e documenta as variáveis finais do projeto.
 
-```text
-├── 01_data/
-│   ├── raw/
-│   │   └── samples/
-│
-├── 02_analysis/
-│   └── credit_risk_analysis.xlsx
-│
-├── 03_docs/
-│   ├── data_dictionary.md
-│   ├── methodology.md
-│   └── insights.md
-│
-├── 04_visuals/
-│   ├── charts/
-│   └── deck/
-│
-├── .gitignore
-└── README.md
-```
+## Consultas Power Query observadas
 
-| Pasta/arquivo | Finalidade |
-|---|---|
-| `01_data/raw/` | Armazena a base original preservada. |
-| `01_data/raw/samples/` | Amostras ou arquivos auxiliares da fonte, quando aplicavel. |
-| `02_analysis/credit_risk_analysis.xlsx` | Workbook principal com Power Query, tabelas de analise, KPIs e dashboard. |
-| `03_docs/` | Documentacao tecnica e analitica do projeto. |
-| `04_visuals/charts/` | Graficos exportados para apresentacao e README. |
-| `04_visuals/deck/` | Materiais de apresentacao, quando houver. |
+O workbook contém estas cinco consultas:
 
-## Fonte de Dados
+| Consulta | Papel observado | Situação de atualização |
+|---|---|---|
+| `CaminhoArquivo` | Consulta auxiliar que fornece o caminho do CSV à importação. | Na versão anteriormente analisada, continha caminho local; a configuração da versão corrigida enviada pela autora não foi verificada. |
+| `RAW_CreditData` | Importa o CSV de treinamento e aplica a leitura/tipagem inicial. | Depende de `CaminhoArquivo`. |
+| `MedianaRenda` | Calcula a mediana global de `MonthlyIncome` para imputação. | Consulta auxiliar usada por `CLEAN_pipeline`. |
+| `CLEAN_pipeline` | Trata dados, cria colunas derivadas e organiza a tabela final. | Base das análises e da tabela `CLEAN_pipeline`. |
+| `ETL_LOG_Projeto01` | Importava um log de etapas a partir de outro arquivo CSV. | Na versão anteriormente analisada, o arquivo externo não estava no repositório. Não confirmei se a consulta continua ativa na versão atual; a folha de qualidade preserva o registro legível das etapas. |
 
-O projeto utiliza o dataset publico **Give Me Some Credit**, disponibilizado no Kaggle. A base contem informacoes de credito ao consumidor, com aproximadamente 150 mil registros e uma variavel-alvo binaria:
+A autora informou ter ajustado o caminho de origem e enviou a planilha atualizada, agora incorporada à branch. Não executei o refresh nem confirmei no Excel se o log externo foi removido/desabilitado ou se a nova origem funciona em outra pasta. Para reproduzir, abra o Editor do Power Query, confirme a origem em `CaminhoArquivo` e a disponibilidade do CSV; atualize as consultas auxiliares `CaminhoArquivo` e `MedianaRenda`, depois `RAW_CreditData` e `CLEAN_pipeline`. Confirme também se `ETL_LOG_Projeto01` continua ativa e exige arquivo externo. Por fim, atualize as tabelas dinâmicas e compare os totais com os números de referência. Recomenda-se Excel desktop recente para Windows com Power Query; versão exata, configuração atual e compatibilidade em outro computador não foram testadas.
 
-`SeriousDlqin2yrs`: indica se o cliente apresentou inadimplencia grave, definida como atraso de 90 dias ou mais em alguma obrigacao financeira nos dois anos posteriores ao registro.
+**Limitação conhecida:** o caminho foi ajustado pela autora na versão enviada, mas não foi inspecionado nem testado por mim. A portabilidade só poderá ser afirmada depois de confirmar a consulta no Excel e executar uma atualização em outra pasta ou computador. Também falta confirmar se o log é uma dependência ativa e se pode permanecer apenas como registro estático.
 
-No pipeline final, essa variavel foi renomeada para `Inadimplente`.
+## Etapas de tratamento documentadas
 
-## Objetivo Analitico
+1. Importar o CSV de treinamento e tipar as colunas.
+2. Remover uma linha com `age = 0`; a tabela final passa de 150.000 para 149.999 registros.
+3. Tratar os códigos 96 e 98 nas três colunas de atraso como ausentes, preservando o zero.
+4. Preservar as variáveis originais relevantes e criar colunas tratadas separadas.
+5. Criar `Flag_Renda_Informada` antes de imputar `MonthlyIncome` pela mediana global.
+6. Criar `Dependentes_Clean`, substituindo nulos por zero para as agregações previstas.
+7. Tratar valores de utilização rotativa acima de 2 como ausentes na variável limpa, sem remover as linhas.
+8. Criar faixas de idade, renda e utilização, grupos de atraso e `Nivel_Risco`.
 
-O projeto investiga, de forma exploratoria, quais caracteristicas da base se associam a maiores taxas de inadimplencia. As perguntas principais foram:
+As regras acima descrevem a implementação documentada. Como o refresh não foi executado, este texto não certifica que a consulta atual continue atualizando corretamente.
 
-- O historico de atrasos diferencia grupos com maior Default Rate?
-- A utilizacao elevada do credito rotativo esta associada a maior inadimplencia?
-- A faixa de renda apresenta relacao relevante com o risco observado?
-- Uma segmentacao simples por regras (`Nivel_Risco`) consegue separar perfis com Default Rates distintos?
-- A imputacao de renda introduz sinais evidentes de distorcao nas analises descritivas?
+## Definições analíticas
 
-## Pipeline ETL
+**Taxa observada de inadimplência (Default Rate)** = registros positivos de `Inadimplente` / total de registros no grupo. É uma proporção observada na amostra, não uma probabilidade individual estimada.
 
-O tratamento foi realizado no Power Query, dentro de `02_analysis/credit_risk_analysis.xlsx`. A estrutura logica do pipeline e:
+`Nivel_Risco` é uma segmentação por regras: `Alto` quando `Total_Eventos_Atraso >= 3` ou `Categoria_Utilizacao = "Critica"`; `Medio` quando `Total_Eventos_Atraso >= 1` ou `Categoria_Utilizacao = "Alta"`; `Baixo` nos demais casos. A classificação é descritiva, não calibrada e não adequada, por si só, para decidir sobre pessoas.
 
-| Query | Papel |
-|---|---|
-| `RAW_CreditData` | Ingestao da base original sem transformacoes analiticas. |
-| `MedianaRenda` | Calculo da mediana global de `MonthlyIncome`, ignorando nulos. |
-| `CLEAN_pipeline` | Tratamento, criacao de variaveis derivadas, segmentacoes e organizacao final. |
+## Referência numérica e limitações de reconciliação
 
-### Rastreabilidade do ETL
+Na versão de referência anteriormente inspecionada, a tabela armazenada `CLEAN_pipeline` foi lida sem alterar o workbook e comparada ao CSV: 149.999 registros, 10.026 positivos, taxa global de 6,684%, 29.731 rendas imputadas, 3.924 dependentes ausentes na coluna original e 371 valores de utilização acima de 2. Esses totais pertencem à versão observada naquela revisão; não foram recalculados com o workbook corrigido pela autora e não equivalem à validação dos pivôs, gráficos ou segmentações atuais.
 
-O workbook tambem utiliza registro das etapas de transformacao para permitir auditoria do processo. As etapas documentadas seguem a sequencia logica do Power Query:
+A versão corrigida enviada pela autora foi incorporada a esta branch. A autora informou ter corrigido `EDA!N39` e ajustado o caminho de origem; não abri essa versão no Excel nem executei recálculo ou refresh. Portanto, não trato como comprovadas a correção da fórmula, a padronização das faixas de renda, a reconciliação dos caches de pivôs, a limpeza de filtros/segmentações, a revisão do nome definido e da conexão duplicada, ou a remoção de metadados locais. Os números desta página são referência da versão anteriormente conferida, não uma reconciliação do dashboard ou do PDF atuais.
 
-1. Importacao da base original.
-2. Conversao defensiva de tipos em campos numericos sensiveis.
-3. Renomeacao de colunas para padrao final.
-4. Remocao de registro invalido com `age = 0`.
-5. Tratamento dos sentinelas `96` e `98` nas colunas de atraso.
-6. Tratamento de outliers de utilizacao do credito rotativo.
-7. Criacao da flag de renda informada.
-8. Imputacao da renda mensal pela mediana global.
-9. Tratamento de dependentes nulos.
-10. Criacao de variaveis derivadas e categorias.
-11. Criacao de `Nivel_Risco` e `Grupo_Atrasos`.
-12. Reordenacao final das colunas.
+## Uso responsável
 
-Essa ordem evita inconsistencias temporais: a flag de renda e criada antes da imputacao; as categorias sao geradas depois das colunas tratadas; os grupos de atraso sao criados depois da remocao dos sentinelas.
+Os resultados mostram associações na amostra, não causalidade. `Nivel_Risco` não é um modelo preditivo. Diferenças por idade ou renda não devem ser convertidas em regras para clientes. Qualquer uso decisório exigiria avaliação independente de viés, justiça, validade e conformidade, além de dados e validações apropriados.
 
-## Tratamentos Aplicados
-
-### Idade Invalida
-
-Foi identificado um registro com `age = 0`. Como idade zero nao representa um tomador de credito valido, esse registro foi removido. A base final passou de 150.000 para 149.999 linhas.
-
-### Sentinelas nas Colunas de Atraso
-
-Os valores `96` e `98` foram identificados nas tres colunas de atraso. Eles nao foram interpretados como eventos reais de atraso, pois gerariam distorcoes fortes em `Total_Eventos_Atraso`.
-
-Tratamento aplicado:
-
-```m
-each if List.Contains({96, 98}, _) then null else _
-```
-
-O valor `0` foi preservado, pois representa ausencia registrada de atraso.
-
-### Utilizacao do Credito Rotativo
-
-`RevolvingUtilizationOfUnsecuredLines` foi preservada como coluna original. Para analises e categorias, foi criada `Utilizacao_Rotativo_Clean`, em que valores acima de `2` foram tratados como `null`.
-
-Essa decisao mantem valores ate 200% como possiveis casos extremos de uso acima do limite, mas remove valores claramente inadequados para analise descritiva.
-
-### Renda Mensal
-
-`MonthlyIncome` apresentava nulos relevantes. O projeto preserva a renda original em `Renda_Mensal_Original` e cria:
-
-| Coluna | Funcao |
-|---|---|
-| `Flag_Renda_Informada` | Indica se a renda original estava disponivel (`1`) ou foi imputada (`0`). |
-| `Renda_Mensal_Clean` | Usa a renda original quando disponivel e a mediana global quando nula. |
-
-Essa abordagem permite analisar renda sem perder rastreabilidade sobre quais registros foram imputados.
-
-### Dependentes
-
-`Numero_Dependentes` preserva os nulos da fonte. `Dependentes_Clean` substitui nulos por `0` para uso em segmentacoes simples.
-
-## Engenharia de Variaveis
-
-As variaveis derivadas foram criadas para tornar a analise mais interpretavel:
-
-| Variavel | Finalidade |
-|---|---|
-| `Faixa_Etaria` | Agrupar clientes por ciclo de vida financeiro. |
-| `Faixa_Renda` | Comparar Default Rate por nivel de renda mensal. |
-| `Utilizacao_Rotativo_Clean` | Remover outliers extremos da leitura de utilizacao. |
-| `Categoria_Utilizacao` | Transformar utilizacao em faixas de risco interpretaveis. |
-| `Categoria_Razao_Divida` | Classificar comprometimento de renda. |
-| `Categoria_Razao_Divida_Visual` | Apoiar graficos sem nulos. |
-| `Dependentes_Clean` | Permitir analises agregadas de dependentes. |
-| `Total_Eventos_Atraso` | Consolidar o historico de atraso. |
-| `Nivel_Risco` | Segmentar clientes por regras simples. |
-| `Grupo_Atrasos` | Criar grupos ordinais para visualizacao do gradiente de atraso. |
-
-## Segmentacao `Nivel_Risco`
-
-`Nivel_Risco` e o principal entregavel analitico do ETL. Ele combina historico de atraso e utilizacao do credito rotativo:
-
-| Nivel | Regra |
-|---|---|
-| `Alto` | `Total_Eventos_Atraso >= 3` ou `Categoria_Utilizacao = "Critica"` |
-| `Medio` | `Total_Eventos_Atraso >= 1` ou `Categoria_Utilizacao = "Alta"` |
-| `Baixo` | Demais casos |
-
-Essa segmentacao e uma regra de negocio exploratoria. Ela nao estima probabilidade de default e nao substitui um modelo estatistico. Sua utilidade esta em organizar a carteira em grupos com Default Rates observados diferentes.
-
-## Hipoteses Investigadas
-
-### H1 - Eventos de atraso e inadimplencia
-
-O gradiente de `Grupo_Atrasos` indicou associacao positiva entre numero de eventos de atraso e Default Rate. O grupo `5+` apresentou Default Rate muito superior ao grupo `0`.
-
-### H2 - Utilizacao critica e inadimplencia
-
-A categoria `Critica` de utilizacao do credito rotativo apresentou Default Rate substancialmente maior que a categoria `Baixa`, indicando associacao entre uso intenso do limite e maior risco observado.
-
-### H3 - Renda e inadimplencia
-
-As faixas de menor renda apresentaram Default Rates maiores que as faixas superiores. A leitura foi mantida como associacao observada, com ressalva sobre a imputacao de 19,82% da renda.
-
-### H4 - Renda x utilizacao
-
-A combinacao de menor renda com utilizacao critica apresentou maior concentracao de risco na amostra. A interpretacao foi mantida de forma exploratoria: o cruzamento sugere associacao entre restricao de renda, uso elevado de credito e inadimplencia, mas nao permite afirmar causalidade.
-
-### H5 - Segmentacao `Nivel_Risco`
-
-`Nivel_Risco` demonstrou separacao observada entre os grupos `Baixo`, `Medio` e `Alto`. O resultado indica utilidade descritiva da segmentacao, sem caracterizar validacao preditiva.
-
-## KPIs Utilizados
-
-### Default Rate
-
-```text
-Default Rate = clientes inadimplentes / total de clientes
-```
-
-Indicador principal para comparar segmentos.
-
-### Multiplicadores de Risco
-
-Comparam o Default Rate de um segmento ao Default Rate de outro segmento de referencia. Exemplos usados no projeto:
-
-- `Alto` vs. `Baixo` em `Nivel_Risco`.
-- `Critica` vs. `Baixa` em `Categoria_Utilizacao`.
-- `5+` vs. `0` em `Grupo_Atrasos`.
-
-Esses multiplicadores descrevem diferencas observadas na amostra.
-
-### IIR - Indice de Imputacao de Renda
-
-```text
-IIR = registros com Flag_Renda_Informada = 0 / total de registros
-```
-
-O IIR monitora a proporcao da base cuja renda foi imputada.
-
-### CRS - Score de Risco Composto
-
-O CRS foi tratado como indicador auxiliar de leitura e comparacao no workbook, nao como uma coluna final do `CLEAN_pipeline` e nao como modelo estatistico calibrado. Sua interpretacao deve permanecer descritiva, apoiando a leitura do dashboard sem substituir os KPIs principais.
-
-## Graficos e Exportacoes
-
-Os graficos finais do projeto devem ser armazenados em:
-
-```text
-04_visuals/charts/
-```
-
-O workbook principal permanece em:
-
-```text
-02_analysis/credit_risk_analysis.xlsx
-```
-
-Qualquer imagem usada no README ou em apresentacoes deve derivar dos resultados auditados da tabela `CLEAN_pipeline`. Prints ou graficos antigos devem ser evitados quando houver divergencia de cache de Tabela Dinamica.
-
-## Limites de Interpretacao
-
-- O projeto e exploratorio e descritivo.
-- Nao ha inferencia causal.
-- Nao ha treinamento, teste ou validacao fora da amostra.
-- `Nivel_Risco` e uma segmentacao por regras, nao um modelo de credito.
-- Multiplicadores sao observados nesta base e nao devem ser aplicados diretamente a outras carteiras.
-- A renda imputada pode reduzir a variabilidade real da distribuicao.
-- Outliers de `DebtRatio` limitam a interpretacao dessa variavel.
-
-## Consideracoes Finais
-
-A metodologia prioriza clareza, rastreabilidade e coerencia documental. O projeto demonstra um fluxo analitico completo em Excel e Power Query, com tratamento de dados, criacao de variaveis derivadas, analise exploratoria e comunicacao de insights, mantendo escopo compativel com um projeto de portfolio em nivel junior avancado.
